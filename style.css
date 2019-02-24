@@ -1,0 +1,84 @@
+div.clock {
+	font-size: 180px;
+}
+
+div.date {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+div.weathertime {
+	text-size: 21px;
+	
+}
+weather {
+	text-align: center;
+	border-spacing: 25px;
+}
+
+image {
+		
+}
+.forecastTable {
+	border-left: 1px solid;
+	border-right: 1px solid;
+}
+td {
+	padding: 0 10px 0 10px;
+}
+.temperature0 {
+	color: red;
+	font-size: 26px;
+	font-weigth: bold;	
+}
+
+.temperature1 {
+	font-weight: bold;
+	font-size: 23px;
+}
+
+.postillon {
+	width: 600px;
+	margin: 0;
+	padding: 0;
+	font-size: 18px
+}
+.postillon ul li{ list-style:none; display:block; padding-bottom:1px; margin-bottom:5px; }
+
+.canceled {
+	text-decoration: line-through;
+}
+
+.realtime {
+	/*color:#333;*/
+}
+
+img.realtime {
+	vertical-align: middle;
+	display: inline;
+	height: 25px;
+	margin-left: 0.2em;
+}
+
+.notrealtime {
+	text_align: right;
+	/*color:#888;*/
+}
+
+.busline {
+	font-size: 18px;
+	width: 10px;
+}
+
+.busdir {
+	font-size: 18px;
+}
+
+.bustime {
+	font-size: 18px;
+	text-align: right;
+}
+
+.busInfo {
+	font-size: 22px;
+}

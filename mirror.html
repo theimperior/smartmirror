@@ -6,17 +6,21 @@
 <script src="jquery.vticker.js"></script>
 <script src="jcarousellite_1.0.1c4.js" type="text/javascript"></script>
 <script>
-function TimeDate() {
-    	var today = new Date();
-    	var h = today.getHours();
-    	var m = today.getMinutes();
-    	var s = today.getSeconds();
-	h = FillwZeros(h);
-    	m = FillwZeros(m);
-    	s = FillwZeros(s);
-    	document.getElementById('clock1').innerHTML = h + ":" + m;
 
+function updateTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+	h = FillwZeros(h);
+    m = FillwZeros(m);
+    s = FillwZeros(s);
+    document.getElementById('clock1').innerHTML = h + ":" + m;
+}
+
+function updateDate() {
 	//display name of day and date
+	var today = new Date();
 	var nameOfDay;
 	switch(today.getDay()){
 		case 0:	nameOfDay = "Sonntag";
@@ -34,7 +38,7 @@ function TimeDate() {
 		case 6: nameOfDay = "Samstag";
 		break;
 	}
-	document.getElementById("date").innerHTML = nameOfDay + ", " + today.getDate() + "." + (today.getMonth()+1) + "." + today.getFullYear();
+	document.getElementById("date1").innerHTML = nameOfDay + ", " + today.getDate() + "." + (today.getMonth()+1) + "." + today.getFullYear();
 }
 
 function FillwZeros(i) {
@@ -43,11 +47,10 @@ function FillwZeros(i) {
 }
 
 function dateFromString(s) {
-  var bits = s.split(/[-T:]/g);
-  var d = new Date(bits[0], bits[1]-1, bits[2]);
-  d.setHours(bits[3], bits[4], bits[5]);
-
-  return d;
+	var bits = s.split(/[-T:]/g);
+	var d = new Date(bits[0], bits[1]-1, bits[2]);
+	d.setHours(bits[3], bits[4], bits[5]);
+	return d;
 }
 
 function updateWeather() {
@@ -84,27 +87,27 @@ function updateBus(){
 			for(i = 0; i < 4; i++){
 				dep = data.departures[i];
 				if (dep.realtime=='1') {
-					classRealtime = "realtime";
+					classRealtime = 'realtime';
 					stern = "<img class=\"realtime\" src=\"realtime.png\">";
 				} else {
-					classRealtime = "notrealtime";
+					classRealtime = 'notrealtime';
 					stern = "<img class=\"realtime\" src=\"norealtime.png\">";
 				}
 				// sometimes, lines are canceled:
 				if (dep.delay == "-9999") { // line is canceled
-					classCanceled = "canceled";
+					classCanceled = 'canceled';
 				} else {
-					classCanceled = "";
+					classCanceled = '';
 				}
 				// html stuff
-				text = '<tr id="liste' + i + '"><td class="busline","'+classCanceled+'">' + dep.line + '</td>';
-				text = text + '<td class="' + classCanceled + '">' + dep.direction + '</td>';
+				text = '<tr id=liste' + i + '><td class=\"busline ' + classCanceled + '\">' + dep.line + '</td>';
+				text = text + '<td class=\"busdir ' + classCanceled + '\">' + dep.direction + '</td>';
 
 			
 				if (dep.countdown < 20) {
-					text = text + '<td class="'+classRealtime+' '+classCanceled+'">' + dep.countdown  + stern+'</td>';
+					text = text + '<td class=\"bustime ' + classRealtime + ' ' + classCanceled + '\">' + dep.countdown + stern+'</td>';
 				} else {
-					text = text + '<td class="'+classRealtime+' '+classCanceled+'">' + dep.timetable  +  stern+'</td>';
+					text = text + '<td class=\"bustime ' + classRealtime + ' ' + classCanceled + '\">' + dep.timetable + stern+'</td>';
 				}
 				text = text + '</tr>';
 				// switch seamless: delete the old, insert the new one
@@ -134,77 +137,23 @@ function updatePostillonNews(){
 }
 
 function initialize(){
-	TimeDate();
+	updateTime();
+	updateDate();
 	updateWeather();
 	updateBus();
 	updatePostillonNews();
 	//var t = setTimeout(refreshAll, 1000);
+	setInterval(updateTime, 1000); //1 sec
+	setInterval(updateDate, 1000); //1 sec
+	setInterval(updateWeather, 1800000) //30min
+	setInterval(updateBus, 10000);
+	setInterval(updatePostillonNews, 1800000);
 }
+
+
 </script>
-
-
 <title>SmartMirror</title>
-<style>
-div.clock {
-	font-size: 140px;
-}
-weather {
-	text-align: center;
-	border-spacing: 25px;
-}
-image {
-		
-}
-.forecastTable {
-	border-left: 1px solid;
-	border-right: 1px solid;
-}
-td {
-	padding: 0 10px 0 10px;
-}
-.temperature0 {
-	color: red;
-	font-size: 23px;
-	font-weigth: bold;	
-}
-
-.temperature1 {
-	font-weight: bold;
-}
-
-.postillon {
-	width: 600px;
-	margin: 0;
-	padding: 0;
-}
-.postillon ul li{ list-style:none; display:block; padding-bottom:1px; margin-bottom:5px; }
-
-.canceled {
-	text-decoration: line-through;
-}
-
-.realtime {
-	color:#333;
-}
-
-img.realtime {
-	vertical-align: middle;
-	display: inline;
-	height: 25px;
-	margin-left: 0.2em;
-}
-
-.notrealtime {
-	text_align: right;
-	color:#888;
-}
-
-.busline {
-	width: 10px;
-}
-
-
-</style>
+<link href="style.css" rel="stylesheet" type="text/css">
 
 </head>
 <body onload=initialize() style="background-color:black;">
@@ -214,44 +163,44 @@ img.realtime {
 	<table>
 		<tr>
 			<td text-align=left width=400px>
-				<div id=date></div><div class=clock id=clock1>
+				<div class="date" id="date1"></div>
+				<div class="clock" id="clock1"></div>
+			</td>
+			<td>
+				<div class="weather" id="weather0">
+					<div align="center" class="weathertime" id="time0">now</div>
+					<img class="image" id="imgWeather0" height=100px width=100px>
+					<div class="temperature0" align="center" id="temperature0"></div>
+				</div>
+			</td>
+			<td class="forecastTable">
+				<div class="weather" id="weather1">
+					<div align="center" class="weathertime" id="time1"></div>
+					<img class="image" id=imgWeather1 height=100px width=80px>
+					<div class="temperature1" align="center" id="temperature1"></div>
 				</div>
 			</td>
 			<td>
-				<div class=weather id=weather0>
-					<div align="center" id=time0>now</div>
-					<img class=image id=imgWeather0 height=100px width=100px>
-					<div class=temperature0 align="center" id=temperature0></div>
-				</div>
-			</td>
-			<td class=forecastTable>
-				<div class=weather id=weather1>
-					<div align="center" id=time1></div>
-					<img class=image id=imgWeather1 height=100px width=80px>
-					<div class=temperature1 align="center" id=temperature1></div>
-				</div>
-			</td>
-			<td>
-				<div class=weather id=weather2>
-					<div align="center" id=time2></div>
-					<img class=image id=imgWeather2 height=100px width=70px>
-					<div class=temperature1 align="center" id=temperature2></div>
+				<div class="weather" id="weather2">
+					<div align="center" class=weathertime id="time2"></div>
+					<img class=image id="imgWeather2" height=100px width=70px>
+					<div class=temperature1 align="center" id="temperature2"></div>
 				</div>
 			</td>
 		</tr> 
 	</table>
 	<table>
 		<tr>
-			<td colspan="2">
-				<div>N&auml;chste Busse am Lehrer Tal:</div>
+			<td  colspan="2">
+				<div class="busInfo">N&auml;chste Verbindungen am Lehrer Tal:</div>
 			</td>
 		</tr>
-		<tr id=busconnections></tr>
+		<tr id="busconnections"></tr>
 	</table>
 	<table>
 		<tr>
 			<td>
-				<div class=postillon id=postillon></div>
+				<div class="postillon" id="postillon"></div>
 			</td>
 		</tr>
 	</table>
