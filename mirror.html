@@ -79,7 +79,7 @@ function updateWeather() {
 		
 	}
 }
-
+//TODO 6-8 busabfahrtszeiten
 function updateBus(){
 	$.getJSON("busverbindung.php", function(data) {
 		//document.getElementById("bus0").innerHTML = data.info.stopname;
@@ -117,7 +117,7 @@ function updateBus(){
 		}
 	}); 
 }
-
+//TODO feed langsamer laufen lassen und breite vergrößern, die pointe fehlt manchmal 
 function updatePostillonNews(){
 	$.getJSON("postillonFeed.php", function (data) {
 		//get number of different tickers
