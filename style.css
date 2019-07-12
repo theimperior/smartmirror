@@ -1,5 +1,6 @@
 div.clock {
 	font-size: 180px;
+	width: 480px;
 }
 
 div.date {
@@ -8,7 +9,7 @@ div.date {
 }
 
 div.weathertime {
-	text-size: 21px;
+	font-size: 22px;
 	
 }
 weather {
@@ -21,15 +22,22 @@ image {
 }
 .forecastTable {
 	border-left: 1px solid;
-	border-right: 1px solid;
 }
+
+.greetingText{
+	font-size: 100px;
+	text-align: center;
+	width: 100%;
+	padding: 300px 10px 10px 10px;
+	opacity: 1;
+}
+
 td {
 	padding: 0 10px 0 10px;
 }
 .temperature0 {
-	color: red;
 	font-size: 26px;
-	font-weigth: bold;	
+	font-weight: bold;	
 }
 
 .temperature1 {
@@ -38,12 +46,18 @@ td {
 }
 
 .postillon {
-	width: 600px;
+	width: 900px;
 	margin: 0;
 	padding: 0;
 	font-size: 18px
 }
 .postillon ul li{ list-style:none; display:block; padding-bottom:1px; margin-bottom:5px; }
+
+.dwd {
+	margin-top: 10px;
+	font-size: 24px;
+	color: #ffffaa;
+}
 
 .canceled {
 	text-decoration: line-through;

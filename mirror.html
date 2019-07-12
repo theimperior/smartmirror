@@ -7,20 +7,22 @@
 <script src="jcarousellite_1.0.1c4.js" type="text/javascript"></script>
 <script>
 
+var today;
+var greetingOpacity = 1;
+
 function updateTime() {
-    var today = new Date();
+    today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
-    var s = today.getSeconds();
-	h = FillwZeros(h);
+//    var s = today.getSeconds();
+    h = FillwZeros(h);
     m = FillwZeros(m);
-    s = FillwZeros(s);
+//    s = FillwZeros(s);
     document.getElementById('clock1').innerHTML = h + ":" + m;
 }
 
 function updateDate() {
 	//display name of day and date
-	var today = new Date();
 	var nameOfDay;
 	switch(today.getDay()){
 		case 0:	nameOfDay = "Sonntag";
@@ -55,37 +57,57 @@ function dateFromString(s) {
 
 function updateWeather() {
 	//$.getJSON('https://www.yr.no/place/Germany/Baden-W%C3%BCrttemberg/Ulm/forecast.xml' ,function(data) {
-	var request = new XMLHttpRequest();
-	request.open("GET", "wetter.php", false);
-	request.setRequestHeader("Content-Type", "application/xml");
-	request.send({ 'request': "authentication token" });
-	var xml = request.responseXML;
-	var forecast = xml.getElementsByTagName("time"); 
-	var weather;
-	var i = 0;
-	var today = new Date ();
-	for(i = 0; i < 3; i++) {
-		var detailedForecast = forecast[i];
-		var validFrom = dateFromString(detailedForecast.getAttribute("from"));
-		var validTo = dateFromString(detailedForecast.getAttribute("to"));
-		var symbol = detailedForecast.getElementsByTagName("symbol");
-		var temperature = detailedForecast.getElementsByTagName("temperature");
-		
-		if( i > 0){
-			document.getElementById("time"+i).innerHTML = validFrom.getHours() + "-" + validTo.getHours();
+	//fetch current live temp
+	fetchedLiveTemp = false;
+	$.getJSON("getTemp.php", function(data) {
+		if(data != null){
+            fetchedLiveTemp = true;
+			document.getElementById("temperature0").innerHTML = data.CurrentTemp + " &#x2103";
 		}
-		document.getElementById("imgWeather"+i).setAttribute("src", "yr-weather-symbols/dist/svg/" + symbol[0].getAttribute("var") + ".svg");
-		document.getElementById("temperature"+i).innerHTML = temperature[0].getAttribute("value") + " &#x2103";	
-		
-	}
+		var request = new XMLHttpRequest();
+		request.open("GET", "wetter.php", false);
+		request.setRequestHeader("Content-Type", "application/xml");
+		request.send({ 'request': "authentication token" });
+		var xml = request.responseXML;
+		var forecast = xml.getElementsByTagName("time"); 
+		var weather;
+		var today = new Date ();
+		for(var i = 0; i < 4; i++) {
+			var detailedForecast = forecast[i];
+			var validFrom = dateFromString(detailedForecast.getAttribute("from"));
+			var validTo = dateFromString(detailedForecast.getAttribute("to"));
+			var symbol = detailedForecast.getElementsByTagName("symbol");
+			var temperature = detailedForecast.getElementsByTagName("temperature");
+			
+			if( i > 0){
+				document.getElementById("time"+i).innerHTML = validFrom.getHours() + "-" + validTo.getHours();
+			}
+			document.getElementById("imgWeather"+i).setAttribute("src", "yr-weather-symbols/dist/svg/" + symbol[0].getAttribute("var") + ".svg");
+			if(i > 0 || (i == 0 && fetchedLiveTemp == false)) {
+				document.getElementById("temperature"+i).innerHTML = temperature[0].getAttribute("value") + " &#x2103";	
+			}
+		}
+	})
+	$.getJSON("dwd.php", function(data) {
+		if(data != null){
+				document.getElementById("dwd").innerHTML = data.headline;
+		}
+	})
 }
 
 function updateBus(){
 	$.getJSON("busverbindung.php", function(data) {
 		//document.getElementById("bus0").innerHTML = data.info.stopname;
-		if(data.departures.length >= 3){
-			for(i = 0; i < 4; i++){
-				dep = data.departures[i];
+		if(data.departures.length >= 5){
+			var num = 0, i = 0;
+			while (num < 6){
+				var dep = data.departures[i];
+				if (!dep) break;
+				if (dep.direction.indexOf("Science Park") < 0 && dep.direction.indexOf("Wissenschafts") < 0) {
+					i++;
+					continue;
+				}
+				num++;
 				if (dep.realtime=='1') {
 					classRealtime = 'realtime';
 					stern = "<img class=\"realtime\" src=\"realtime.png\">";
@@ -100,7 +122,7 @@ function updateBus(){
 					classCanceled = '';
 				}
 				// html stuff
-				text = '<tr id=liste' + i + '><td class=\"busline ' + classCanceled + '\">' + dep.line + '</td>';
+				text = '<tr id=liste' + num + '><td class=\"busline ' + classCanceled + '\">' + dep.line + '</td>';
 				text = text + '<td class=\"busdir ' + classCanceled + '\">' + dep.direction + '</td>';
 
 			
@@ -111,11 +133,36 @@ function updateBus(){
 				}
 				text = text + '</tr>';
 				// switch seamless: delete the old, insert the new one
-				$('#liste'+i).remove();
+				// 02/06/19: if there are dead entries, change num below and at "text = '<tr ..." back to i and add remove line above continue?
+				$('#liste'+num).remove();
 				$('#busconnections').before(text);
+				i++;
 			}	
 		}
 	}); 
+}
+
+function greetingText(){
+	var greettexts = ["Guten Morgen!", "Hallo!", "Guten Abend!"];
+    var h = today.getHours();
+    if(h >= 4 && h <= 11){
+    	document.getElementById("greetingText").innerHTML = greettexts[0];
+    }
+	else if(h > 11 && h < 18){
+		document.getElementById("greetingText").innerHTML = greettexts[1];
+	}
+	else {
+		document.getElementById("greetingText").innerHTML = greettexts[2];
+	}
+}
+
+function fadeGreetings(){
+	greetingOpacity = greetingOpacity - 0.01;
+	document.getElementById("greetingText").style.opacity = greetingOpacity;
+	if(greetingOpacity > 0){
+		// repeat yourself until the opacity is 0 
+		setTimeout(fadeGreetings, 80)
+	}
 }
 
 function updatePostillonNews(){
@@ -129,14 +176,16 @@ function updatePostillonNews(){
 	$("#postillon").jCarouselLite({
 		vertical: true, 
 		visible: 1,
-		auto:3000,
-		speed:2000,
+		auto:5000,
+		speed:1000,
 		circular: true
 	});
 	});
 }
 
 function initialize(){
+    today = new Date();
+    greetingText();
 	updateTime();
 	updateDate();
 	updateWeather();
@@ -146,8 +195,9 @@ function initialize(){
 	setInterval(updateTime, 1000); //1 sec
 	setInterval(updateDate, 1000); //1 sec
 	setInterval(updateWeather, 1800000) //30min
-	setInterval(updateBus, 10000);
+	setInterval(updateBus, 20000);
 	setInterval(updatePostillonNews, 1800000);
+	setTimeout(fadeGreetings, 5000);
 }
 
 
@@ -160,7 +210,7 @@ function initialize(){
 <font color="white">
 
 <div class="page">
-	<table>
+	<table style="padding: 0px 0px 20px 0px;">
 		<tr>
 			<td text-align=left width=400px>
 				<div class="date" id="date1"></div>
@@ -168,7 +218,7 @@ function initialize(){
 			</td>
 			<td>
 				<div class="weather" id="weather0">
-					<div align="center" class="weathertime" id="time0">now</div>
+					<div align="center" class="weathertime" id="time0">jetzt</div>
 					<img class="image" id="imgWeather0" height=100px width=100px>
 					<div class="temperature0" align="center" id="temperature0"></div>
 				</div>
@@ -180,18 +230,25 @@ function initialize(){
 					<div class="temperature1" align="center" id="temperature1"></div>
 				</div>
 			</td>
-			<td>
+			<td class="forecastTable">
 				<div class="weather" id="weather2">
 					<div align="center" class=weathertime id="time2"></div>
-					<img class=image id="imgWeather2" height=100px width=70px>
-					<div class=temperature1 align="center" id="temperature2"></div>
+					<img class=image id="imgWeather2" height=100px width=80px>
+					<div class="temperature1" align="center" id="temperature2"></div>
+				</div>
+			</td>
+			<td class="forecastTable">
+				<div class="weather" id="weather3">
+					<div align="center" class=weathertime id="time3"></div>
+					<img class=image id="imgWeather3" height=100px width=80px>
+					<div class="temperature1" align="center" id="temperature3"></div>
 				</div>
 			</td>
 		</tr> 
 	</table>
-	<table>
+	<table style="padding: 0px 0px 20px 0px;">
 		<tr>
-			<td  colspan="2">
+			<td  colspan="3">
 				<div class="busInfo">N&auml;chste Verbindungen am Lehrer Tal:</div>
 			</td>
 		</tr>
@@ -201,6 +258,21 @@ function initialize(){
 		<tr>
 			<td>
 				<div class="postillon" id="postillon"></div>
+			</td>
+		</tr>
+	</table>
+        <table>
+                <tr>
+                        <td>
+                                <div class="dwd" id="dwd"></div>
+                        </td>
+                </tr>
+        </table>
+
+	<table class="greetingText">
+		<tr>
+			<td>
+				<div id="greetingText">Guten Morgen</div>
 			</td>
 		</tr>
 	</table>
