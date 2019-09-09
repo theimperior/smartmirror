@@ -91,6 +91,7 @@ function updateWeather() {
 	$.getJSON("dwd.php", function(data) {
 		if(data != null){
 				document.getElementById("dwd").innerHTML = data.headline;
+				document.getElementById("dwdtext").innerHTML = data.description;
 		}
 	})
 }
@@ -265,6 +266,7 @@ function initialize(){
                 <tr>
                         <td>
                                 <div class="dwd" id="dwd"></div>
+				<div class="dwdtext" id="dwdtext"></div>
                         </td>
                 </tr>
         </table>

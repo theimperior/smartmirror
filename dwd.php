@@ -36,8 +36,9 @@ foreach($relevant_alerts as $key => $array) {
 array_multisort($sortArray, SORT_ASC, SORT_NUMERIC, $relevant_alerts);
 
 $numberOfAlerts = count($relevant_alerts);
+$description = "";
 
-echo '{"headline":';
+echo '{"headline":"';
 $cnt = 0;
 foreach($relevant_alerts as $alert) {
 	$event = $alert['event'];
@@ -52,9 +53,9 @@ foreach($relevant_alerts as $alert) {
 	</li>";*/
 	#if ($cnt > 0) echo ',';
 	#echo '"headline":"'.$headline.'"';
-	echo '"'.$headline.'"';
+	echo $headline.' ';
 	$cnt += 1;
 }
 
-	echo "}";
+	echo '","description":"'.$description.'"}';
 ?>

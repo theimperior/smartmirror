@@ -1,3 +1,9 @@
+body {
+	font-family: "Helvetica";
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
 div.clock {
 	font-size: 180px;
 	width: 480px;
@@ -57,6 +63,11 @@ td {
 	margin-top: 10px;
 	font-size: 24px;
 	color: #ffffaa;
+}
+
+.dwdtext {
+        margin-top: 10px;
+        font-size: 18px;
 }
 
 .canceled {
