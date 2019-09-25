@@ -8,7 +8,6 @@
 <script>
 
 var today;
-var greetingOpacity = 1;
 
 function updateTime() {
     today = new Date();
@@ -21,10 +20,8 @@ function updateTime() {
     document.getElementById('clock1').innerHTML = h + ":" + m;
 }
 
-function updateDate() {
-	//display name of day and date
-	var nameOfDay;
-	switch(today.getDay()){
+function getNameOfDay(day) {
+	switch(day){
 		case 0:	nameOfDay = "Sonntag";
 		break;
 		case 1:	nameOfDay = "Montag";
@@ -35,16 +32,22 @@ function updateDate() {
 		break;
 		case 4:	nameOfDay = "Donnerstag";
 		break;
-		case 5: nameOfDay = "Freitag";
+		case 5: 	nameOfDay = "Freitag";
 		break;
-		case 6: nameOfDay = "Samstag";
+		case 6: 	nameOfDay = "Samstag";
 		break;
 	}
+	return nameOfDay;
+}
+
+function updateDate() {
+	//display name of day and date
+	var nameOfDay = getNameOfDay(today.getDay());
 	document.getElementById("date1").innerHTML = nameOfDay + ", " + today.getDate() + "." + (today.getMonth()+1) + "." + today.getFullYear();
 }
 
 function FillwZeros(i) {
-    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    if (i < 10) {i = "0" + i;} // add zero in front of numbers < 10
     return i;
 }
 
@@ -53,6 +56,18 @@ function dateFromString(s) {
 	var d = new Date(bits[0], bits[1]-1, bits[2]);
 	d.setHours(bits[3], bits[4], bits[5]);
 	return d;
+}
+
+var MWidx = 1;
+function initMountainWeather() {
+	document.getElementById("MWText").innerHTML = getNameOfDay(today.getDay() + 1);
+}
+
+function rotateMountainWeather() {
+	MWidx = MWidx + 1
+	if(MWidx == 4) {MWidx = 1;}
+	document.getElementById("MWImg").src = "mountainWeather/weatherday" + MWidx + ".jpg";
+	document.getElementById("MWText").innerHTML = getNameOfDay(today.getDay() + MWidx);
 }
 
 function updateWeather() {
@@ -143,29 +158,6 @@ function updateBus(){
 	}); 
 }
 
-function greetingText(){
-	var greettexts = ["Guten Morgen!", "Hallo!", "Guten Abend!"];
-    var h = today.getHours();
-    if(h >= 4 && h <= 11){
-    	document.getElementById("greetingText").innerHTML = greettexts[0];
-    }
-	else if(h > 11 && h < 18){
-		document.getElementById("greetingText").innerHTML = greettexts[1];
-	}
-	else {
-		document.getElementById("greetingText").innerHTML = greettexts[2];
-	}
-}
-
-function fadeGreetings(){
-	greetingOpacity = greetingOpacity - 0.01;
-	document.getElementById("greetingText").style.opacity = greetingOpacity;
-	if(greetingOpacity > 0){
-		// repeat yourself until the opacity is 0 
-		setTimeout(fadeGreetings, 80)
-	}
-}
-
 function updatePostillonNews(){
 	$.getJSON("postillonFeed.php", function (data) {
 		//get number of different tickers
@@ -184,9 +176,32 @@ function updatePostillonNews(){
 	});
 }
 
+var infoLevel = 0;
+var maxLevel = 1;
+document.onkeypress = function(e) {
+    e = e || window.event;
+    var keyCode = e.charCode;
+	if (keyCode == 109) {//m 
+		infoLevel = infoLevel + 1;
+		if (infoLevel > maxLevel) infoLevel = 0;
+		moreInfo(infoLevel);
+	}
+};
+
+function moreInfo(level) {
+	switch(level) {
+		case 0: 
+		document.getElementById("MWTable").style.visibility='hidden';
+		break;
+		case 1:
+		document.getElementById("MWTable").style.visibility='visible';
+		break;
+	}
+}
+
 function initialize(){
     today = new Date();
-    greetingText();
+	initMountainWeather();
 	updateTime();
 	updateDate();
 	updateWeather();
@@ -198,7 +213,7 @@ function initialize(){
 	setInterval(updateWeather, 1800000) //30min
 	setInterval(updateBus, 20000);
 	setInterval(updatePostillonNews, 1800000);
-	setTimeout(fadeGreetings, 5000);
+	setInterval(rotateMountainWeather, 4000);
 }
 
 
@@ -269,12 +284,16 @@ function initialize(){
 				<div class="dwdtext" id="dwdtext"></div>
                         </td>
                 </tr>
-        </table>
-
-	<table class="greetingText">
+     </table>
+	<table id="MWTable" style="padding: 0px 0px 20px 0px;">
+		<tr>
+		<td>
+				<div class="MWText" id="MWText"></div>
+			</td>
+		</tr>
 		<tr>
 			<td>
-				<div id="greetingText">Guten Morgen</div>
+				<div id="BergWetter"><img id="MWImg" src="mountainWeather/weatherday1.jpg"></div>
 			</td>
 		</tr>
 	</table>
