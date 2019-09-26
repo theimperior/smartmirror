@@ -67,7 +67,7 @@ function rotateMountainWeather() {
 	MWidx = MWidx + 1
 	if(MWidx == 4) {MWidx = 1;}
 	document.getElementById("MWImg").src = "mountainWeather/weatherday" + MWidx + ".jpg";
-	document.getElementById("MWText").innerHTML = getNameOfDay(today.getDay() + MWidx);
+	document.getElementById("MWText").innerHTML = getNameOfDay((today.getDay() + MWidx) % 7);
 }
 
 function updateWeather() {
