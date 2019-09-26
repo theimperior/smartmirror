@@ -8,7 +8,9 @@
 <script>
 
 var today;
-
+var BBCNewsItems;
+var BBCNewsItemPointer;
+	
 function updateTime() {
     today = new Date();
     var h = today.getHours();
@@ -68,6 +70,39 @@ function rotateMountainWeather() {
 	if(MWidx == 4) {MWidx = 1;}
 	document.getElementById("MWImg").src = "mountainWeather/weatherday" + MWidx + ".jpg";
 	document.getElementById("MWText").innerHTML = getNameOfDay((today.getDay() + MWidx) % 7);
+}
+	
+function updateBBCWorldNewsItems() {
+	var request = new XMLHttpRequest();
+	request.open("GET", "bbcWorld.php", false);
+	request.setRequestHeader("Content-Type", "application/xml");
+	request.send({ 'request': "authentication token" });
+	var xml = request.responseXML;
+	BBCNewsItems = xml.getElementsByTagName("item"); 
+}
+
+
+function rotateBBCNews() {
+	for(var i = 0; i < 5; i++) {
+		var idx = BBCNewsItemPointer + i;
+		if(idx < BBCNewsItems.length) {
+			var item = BBCNewsItems[idx];
+			var title = item.getElementsByTagName("title");
+			var description = item.getElementsByTagName("description");
+			var html = '<tr id=news' + i + ' class=BBCHeadline>' + title + '</tr>';
+			html = html + '<tr id=news' + i + ' class=BBCDesc>' + description + '</tr>';
+			$('#news' + i).remove();
+			$('#BBCNews').before(html);
+		} else {
+			BBCNewsItemPointer = 0;
+			//remove remaining news items
+			for(var k = i; k < 5; k++){
+				$('#news' + k).remove();
+			}
+			return;
+		}
+	}
+	BBCNewsItemPointer += 5;
 }
 
 function updateWeather() {
@@ -207,6 +242,8 @@ function initialize(){
 	updateWeather();
 	updateBus();
 	updatePostillonNews();
+	updateBBCWorldNewsItems() ;
+	rotateBBCNews();
 	//var t = setTimeout(refreshAll, 1000);
 	setInterval(updateTime, 1000); //1 sec
 	setInterval(updateDate, 1000); //1 sec
@@ -214,6 +251,8 @@ function initialize(){
 	setInterval(updateBus, 20000);
 	setInterval(updatePostillonNews, 1800000);
 	setInterval(rotateMountainWeather, 4000);
+	setInterval(updateBBCWorldNewsItems, 2000000);
+	setInterval(rotateBBCNews, 15000);
 }
 
 
@@ -296,6 +335,9 @@ function initialize(){
 				<div id="BergWetter"><img id="MWImg" src="mountainWeather/weatherday1.jpg"></div>
 			</td>
 		</tr>
+	</table>
+	<table id="BBCNews">
+		
 	</table>
 
 </div>
