@@ -24,9 +24,6 @@ weather {
 	border-spacing: 25px;
 }
 
-image {
-		
-}
 .forecastTable {
 	border-left: 1px solid;
 }
@@ -56,6 +53,18 @@ td {
 	font-size: 18px
 }
 .postillon ul li{ list-style:none; display:block; padding-bottom:1px; margin-bottom:5px; }
+
+.BBCHeadline {
+    font-weight: bold;
+}
+
+.BBCNewsTable {
+    visibilty: hidden;
+}
+
+.MWTable {
+    visibilty: hidden;
+}
 
 .dwd {
 	margin-top: 10px;
