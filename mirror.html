@@ -72,7 +72,7 @@ function rotateMountainWeather() {
 	document.getElementById("MWText").innerHTML = getNameOfDay((today.getDay() + MWidx) % 7);
 }
 	
-function updateBBCWorldNewsItems() {
+function updateBBCWorldNews() {
 	var request = new XMLHttpRequest();
 	request.open("GET", "bbcWorld.php", false);
 	request.setRequestHeader("Content-Type", "application/xml");
@@ -89,8 +89,8 @@ function rotateBBCNews() {
 			var item = BBCNewsItems[idx];
 			var title = item.getElementsByTagName("title");
 			var description = item.getElementsByTagName("description");
-			var html = '<tr id=news' + i + ' class=BBCHeadline>' + title + '</tr>';
-			html = html + '<tr id=news' + i + ' class=BBCDesc>' + description + '</tr>';
+			var html = '<div id=\"news' + i +'\"> <tr class=BBCHeadline>' + title + '</tr>';
+			html = html + '<tr class=BBCDesc>' + description + '</tr></div>';
 			$('#news' + i).remove();
 			$('#BBCNews').before(html);
 		} else {
@@ -212,7 +212,7 @@ function updatePostillonNews(){
 }
 
 var infoLevel = 0;
-var maxLevel = 1;
+var maxLevel = 2;
 document.onkeypress = function(e) {
     e = e || window.event;
     var keyCode = e.charCode;
@@ -227,9 +227,13 @@ function moreInfo(level) {
 	switch(level) {
 		case 0: 
 		document.getElementById("MWTable").style.visibility='hidden';
+		document.getElementById("BBCNewsTable").style.visibility='hidden';
 		break;
 		case 1:
 		document.getElementById("MWTable").style.visibility='visible';
+		break;
+		case 2:
+		document.getElementById("BBCNewsTable").style.visibility='visible';
 		break;
 	}
 }
@@ -242,7 +246,7 @@ function initialize(){
 	updateWeather();
 	updateBus();
 	updatePostillonNews();
-	updateBBCWorldNewsItems() ;
+	updateBBCWorldNews() ;
 	rotateBBCNews();
 	//var t = setTimeout(refreshAll, 1000);
 	setInterval(updateTime, 1000); //1 sec
@@ -251,7 +255,7 @@ function initialize(){
 	setInterval(updateBus, 20000);
 	setInterval(updatePostillonNews, 1800000);
 	setInterval(rotateMountainWeather, 4000);
-	setInterval(updateBBCWorldNewsItems, 2000000);
+	setInterval(updateBBCWorldNews, 2000000);
 	setInterval(rotateBBCNews, 15000);
 }
 
@@ -336,8 +340,8 @@ function initialize(){
 			</td>
 		</tr>
 	</table>
-	<table id="BBCNews">
-		
+	<table id="BBCNewsTable">
+        <tr id="BBCNews"></tr>
 	</table>
 
 </div>
