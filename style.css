@@ -55,15 +55,26 @@ td {
 .postillon ul li{ list-style:none; display:block; padding-bottom:1px; margin-bottom:5px; }
 
 .BBCHeadline {
-    font-weight: bold;
+    	font-weight: bold;
 }
 
 .BBCNewsTable {
-    visibilty: hidden;
+   	visibility: hidden;
+}
+
+.BBCDesc {
+	padding-bottom: 15px;
+}
+
+.BBCNewsHead {
+	font-size: 22px;
+	font-weight: bold;
+	padding-bottom: 15px;
 }
 
 .MWTable {
-    visibilty: hidden;
+	padding: 0px 0px 66px 0px;
+	visibility: hidden;
 }
 
 .dwd {

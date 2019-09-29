@@ -89,10 +89,11 @@ function rotateBBCNews() {
 			var item = BBCNewsItems[idx];
 			var title = item.getElementsByTagName("title");
 			var description = item.getElementsByTagName("description");
-			var html = '<div id=\"news' + i +'\"> <tr class=BBCHeadline>' + title + '</tr>';
-			html = html + '<tr class=BBCDesc>' + description + '</tr></div>';
-			$('#news' + i).remove();
-			$('#BBCNews').before(html);
+			var html = '<tr id=BBCh' + i + ' class=BBCHeadline><td>' + title[0].firstChild.data + '</td></tr>';
+			html = html + '<tr id=BBCd' + i + '><td class=BBCDesc>' + description[0].firstChild.data + '</td></tr>';
+			$('#BBCh' + i).remove();
+			$('#BBCd' + i).remove();
+			$('#BBCNews').after(html);
 		} else {
 			BBCNewsItemPointer = 0;
 			//remove remaining news items
@@ -256,7 +257,7 @@ function initialize(){
 	setInterval(updatePostillonNews, 1800000);
 	setInterval(rotateMountainWeather, 4000);
 	setInterval(updateBBCWorldNews, 2000000);
-	setInterval(rotateBBCNews, 15000);
+	setInterval(rotateBBCNews, 25000);
 }
 
 
@@ -328,7 +329,7 @@ function initialize(){
                         </td>
                 </tr>
      </table>
-	<table id="MWTable" style="padding: 0px 0px 20px 0px;">
+	<table id="MWTable" class="MWTable">
 		<tr>
 		<td>
 				<div class="MWText" id="MWText"></div>
@@ -340,8 +341,8 @@ function initialize(){
 			</td>
 		</tr>
 	</table>
-	<table id="BBCNewsTable">
-        <tr id="BBCNews"></tr>
+	<table id="BBCNewsTable" class="BBCNewsTable">
+        <tr id="BBCNews"><td class="BBCNewsHead">BBC World News</td></tr>
 	</table>
 
 </div>
