@@ -33,6 +33,11 @@ weather {
 	font-size: 22px;
 }
 
+.RRText {
+    text-align: center;
+    font-size: 22px;
+}
+
 td {
 	padding: 0 10px 0 10px;
 }
@@ -75,6 +80,18 @@ td {
 .MWTable {
 	padding: 0px 0px 66px 0px;
 	visibility: hidden;
+}
+
+.RRoverlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.RRmap {
+    position: relative;
+    top: 0;
+    left: 0;
 }
 
 .dwd {

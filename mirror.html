@@ -34,9 +34,9 @@ function getNameOfDay(day) {
 		break;
 		case 4:	nameOfDay = "Donnerstag";
 		break;
-		case 5: 	nameOfDay = "Freitag";
+		case 5: nameOfDay = "Freitag";
 		break;
-		case 6: 	nameOfDay = "Samstag";
+		case 6: nameOfDay = "Samstag";
 		break;
 	}
 	return nameOfDay;
@@ -257,7 +257,7 @@ function initialize(){
 	setInterval(updatePostillonNews, 1800000);
 	setInterval(rotateMountainWeather, 4000);
 	setInterval(updateBBCWorldNews, 2000000);
-	setInterval(rotateBBCNews, 25000);
+	setInterval(rotateBBCNews, 30000);
 }
 
 
@@ -332,12 +332,25 @@ function initialize(){
 	<table id="MWTable" class="MWTable">
 		<tr>
 		<td>
-				<div class="MWText" id="MWText"></div>
-			</td>
+            <div class="MWText" id="MWText"></div>
+        </td>
+        <td>
+            <div class="RRText" id="RRText">Rain Radar</div>
+        </td>
 		</tr>
 		<tr>
 			<td>
 				<div id="BergWetter"><img id="MWImg" src="mountainWeather/weatherday1.jpg"></div>
+			</td>
+		</tr>
+	</table>
+	<table>
+        <tr>
+			<td>
+				<div id="RainRadar" style="position: relative; left: 0; top: 0;">
+                    <img id="RRoverlay" src="rainRadar/overlay.png" class="RRoverlay">
+                    <img id="RRmap" src="getRain.php" class="RRmap">
+                </div>
 			</td>
 		</tr>
 	</table>
