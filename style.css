@@ -78,12 +78,13 @@ td {
 }
 
 .MWTable {
-	padding: 0px 0px 66px 0px;
+	padding: 0px 0px 60px 0px;
 	visibility: hidden;
 }
 
 .RRTable {
-    visibility: visible;
+    padding: 0px 0px 60px 0px;
+    visibility: hidden;
 }
 
 .RRoverlay {
