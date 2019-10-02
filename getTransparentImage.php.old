@@ -1,0 +1,34 @@
+<?php
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+	//$image_source = imagecreatefrompng('./rainRadar/rr3.png');
+	//imagealphablending($image_source, false);
+	//imagesavealpha($image_source, true);
+
+	/*header('Content-Length: ' . filesize($image_source));*/
+	//$im = imagecreatetruecolor(760,616);
+	//$bg = imagecolorallocatealpha($image_source, 110, 110, 110, 127);
+	//imagecolortransparent($image_source, $bg);
+	//imagefill($image_source, 0, 0, $bg);
+	//header('Content-Type: image/png');
+	//imagepng($image_source);
+	//imagedestroy($image_source);
+
+
+   $image = './rainRadar/rr3.png';
+   $im = imagecreatefrompng($image);
+   //if you exactly know the RGB color indexes
+   $rgb = imagecolorexact($im, 110, 110, 110);
+   //or keep the rgb color by position so at top 0 left 0
+   //$rgb = imagecolorat($im, 0, 0);
+   //print($rgb);
+	imagecolortransparent($im, $rgb);
+   header("Content-type: image/png");
+   //display the image directly
+   imagepng($im);
+   // or save it
+   // imagepng($im, 'test-to-transparent.png');
+   imagedestroy($im);
+
+?>
