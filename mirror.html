@@ -213,7 +213,7 @@ function updatePostillonNews(){
 }
 
 var infoLevel = 0;
-var maxLevel = 2;
+var maxLevel = 3;
 document.onkeypress = function(e) {
     e = e || window.event;
     var keyCode = e.charCode;
@@ -229,11 +229,15 @@ function moreInfo(level) {
 		case 0: 
 		document.getElementById("MWTable").style.visibility='hidden';
 		document.getElementById("BBCNewsTable").style.visibility='hidden';
+		document.getElementById("RRTable").style.visibility='hidden';
 		break;
 		case 1:
 		document.getElementById("MWTable").style.visibility='visible';
 		break;
 		case 2:
+		document.getElementById("RRTable").style.visibility='visible';
+		break;
+		case 3:
 		document.getElementById("BBCNewsTable").style.visibility='visible';
 		break;
 	}
@@ -334,9 +338,6 @@ function initialize(){
 		<td>
             <div class="MWText" id="MWText"></div>
         </td>
-        <td>
-            <div class="RRText" id="RRText">Rain Radar</div>
-        </td>
 		</tr>
 		<tr>
 			<td>
@@ -344,12 +345,12 @@ function initialize(){
 			</td>
 		</tr>
 	</table>
-	<table>
+	<table id="RRTable" class="RRTable">
         <tr>
 			<td>
 				<div id="RainRadar" style="position: relative; left: 0; top: 0;">
                     <img id="RRoverlay" src="rainRadar/overlay.png" class="RRoverlay">
-                    <img id="RRmap" src="getRain.php" class="RRmap">
+                    <img id="RRmap" src="rainRadar/rr3.png" class="RRmap">
                 </div>
 			</td>
 		</tr>
