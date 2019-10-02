@@ -71,6 +71,10 @@ function rotateMountainWeather() {
 	document.getElementById("MWImg").src = "mountainWeather/weatherday" + MWidx + ".jpg";
 	document.getElementById("MWText").innerHTML = getNameOfDay((today.getDay() + MWidx) % 7);
 }
+
+function updateRainRadar() {
+    document.getElementById("RRmap").src = "getRain.php?random=" + new Date().getTime();
+}
 	
 function updateBBCWorldNews() {
 	var request = new XMLHttpRequest();
@@ -227,6 +231,7 @@ document.onkeypress = function(e) {
 function moreInfo(level) {
 	switch(level) {
 		case 0: 
+		clearInterval(updateRainRadar);
 		document.getElementById("MWTable").style.visibility='hidden';
 		document.getElementById("BBCNewsTable").style.visibility='hidden';
 		document.getElementById("RRTable").style.visibility='hidden';
@@ -235,6 +240,8 @@ function moreInfo(level) {
 		document.getElementById("MWTable").style.visibility='visible';
 		break;
 		case 2:
+		updateRainRadar();
+		setInterval(updateRainRadar, 300000); // 5 minutes
 		document.getElementById("RRTable").style.visibility='visible';
 		break;
 		case 3:
@@ -350,7 +357,7 @@ function initialize(){
 			<td>
 				<div id="RainRadar" style="position: relative; left: 0; top: 0; overflow: hidden">
                     <img id="RRoverlay" src="rainRadar/overlay2-0.png" class="RRoverlay">
-                    <img id="RRmap" src="rainRadar/getRain.php" class="RRmap">
+                    <img id="RRmap" src="getRain.php" class="RRmap">
                 </div>
 			</td>
 		</tr>
