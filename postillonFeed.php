@@ -1,6 +1,6 @@
 <?php
 $feed = file_get_contents("http://feeds.feedburner.com/blogspot/rkEL");
-$regex = "/[\+]{3}.*[\+]{3}/";
+$regex = "/[\+]{3}\s.*\s[\+]{3}/";
 preg_match_all($regex, $feed, $matches);
 //create JSON out of the feed
 //var_dump($matches[0]);
@@ -11,7 +11,7 @@ $i = 1;
 foreach($matches[0] as $feed){
 	$htmlfeed = html_entity_decode($feed);
 	echo '"<ul><li>';
-	print(str_replace("<br>", "</li><li>", $htmlfeed));
+	print(str_replace("</p><p>", "</li><li>", $htmlfeed));
 	if($i == $numberOfItems){
 		echo '</li></ul>"]}';
 	}
